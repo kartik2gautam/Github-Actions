@@ -69,6 +69,8 @@ jobs:
       - name: Make update-version.sh executable
         run: chmod +x .github/scripts/update-version.sh
       - name: Update version
+        env:
+          PRERELEASE_VERSION: ${{ github.event.inputs.prerelease_version }}
         run: .github/scripts/update-version.sh $PRERELEASE_VERSION 
 
       - name: Update the change log with the approximate release date
@@ -133,8 +135,8 @@ jobs:
 
 
 
-          echo "STABLE_VERSION=${stable_version}" >> $GITHUB_ENV
-          echo "STABLE_NEXT_VERSION=${stable_next_version}.dev" >> $GITHUB_ENV
+          echo "STABLE_VERSION=${stable_version}"
+          echo "STABLE_NEXT_VERSION=${stable_next_version}.dev"
 
       - name: Make update-version.sh executable
         run: chmod +x .github/scripts/update-version.sh

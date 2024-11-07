@@ -1,4 +1,4 @@
 #!/bin/bash -e
 
-git config user.name opentelemetrybot
-git config user.email 107717825+opentelemetrybot@users.noreply.github.com
+git config user.name kartik2gautam
+git config user.email kartikkg799@gmail.com

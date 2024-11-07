@@ -84,7 +84,9 @@ jobs:
           # not using secrets.GITHUB_TOKEN since pull requests from that token do not run workflows
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
         run: |
+          
           stable_version=$PRERELEASE_VERSION
+          RELEASE_BRANCH_NAME="prepare-release-${stable_version}"
           message="Prepare release ${stable_version}"
           branch="kartik2gautam/prepare-release-${stable_version}"
           git config --global user.email "kartikkg799@gmail.com"

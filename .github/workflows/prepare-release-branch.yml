@@ -69,7 +69,7 @@ jobs:
       - name: Make update-version.sh executable
         run: chmod +x .github/scripts/update-version.sh
       - name: Update version
-        run: .github/scripts/update-version.sh $STABLE_VERSION 
+        run: .github/scripts/update-version.sh $PRERELEASE_VERSION 
 
       - name: Update the change log with the approximate release date
         run: |
@@ -83,8 +83,9 @@ jobs:
           # not using secrets.GITHUB_TOKEN since pull requests from that token do not run workflows
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
         run: |
-          message="Prepare release ${STABLE_VERSION}"
-          branch="kartik2gautam/prepare-release-${STABLE_VERSION}"
+          stable_version=$PRERELEASE_VERSION
+          message="Prepare release ${stable_version}"
+          branch="kartik2gautam/prepare-release-${stable_version}"
           git config --global user.email "kartikkg799@gmail.com"
           git config --global user.name "kartik2gautam"
           git commit -a -m "$message"

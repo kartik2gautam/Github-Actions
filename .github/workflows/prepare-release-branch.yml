@@ -63,9 +63,9 @@ jobs:
 
           git push origin HEAD:$release_branch_name
 
-          echo "STABLE_VERSION=$stable_version" >> $GITHUB_ENV
+          echo "STABLE_VERSION=$stable_version"
 
-          echo "RELEASE_BRANCH_NAME=$release_branch_name" >> $GITHUB_ENV
+          echo "RELEASE_BRANCH_NAME=$release_branch_name"
 
       - name: Update version
         run: .github/scripts/update-version.sh $STABLE_VERSION 

@@ -1,4 +1,4 @@
-## Unreleased (0.2.0)
+## Unreleased
 
 - Ndjson format for S3 and Blob exporters ([#61](https://github.com/monocle2ai/monocle/pull/61))
 - Set monocle exporter from env setting ([#60](https://github.com/monocle2ai/monocle/pull/60))

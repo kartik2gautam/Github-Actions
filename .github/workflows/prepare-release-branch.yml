@@ -60,7 +60,7 @@ jobs:
             echo "unexpected version: $stable_version"
             exit 1
           fi
-          
+
           git push origin HEAD:$release_branch_name
 
           echo "STABLE_VERSION=$stable_version"
@@ -84,8 +84,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
         run: |
           message="Prepare release ${STABLE_VERSION}"
-          branch="opentelemetrybot/prepare-release-${STABLE_VERSION}"
-
+          branch="kartik2gautam/prepare-release-${STABLE_VERSION}"
+          git config --global user.email "kartikkg799@gmail.com"
+          git config --global user.name "kartik2gautam"
           git commit -a -m "$message"
           git push origin HEAD:$branch
           gh pr create --title "[$RELEASE_BRANCH_NAME] $message" \

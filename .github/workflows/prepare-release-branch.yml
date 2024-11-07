@@ -60,7 +60,10 @@ jobs:
             echo "unexpected version: $stable_version"
             exit 1
           fi
-
+        # Pull latest changes from the release branch
+          git fetch origin
+          git checkout $release_branch_name
+          git pull origin $release_branch_name
           git push origin HEAD:$release_branch_name
 
           echo "STABLE_VERSION=$stable_version"

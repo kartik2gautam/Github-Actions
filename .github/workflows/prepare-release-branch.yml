@@ -103,7 +103,7 @@ jobs:
   create-pull-request-against-main:
     environment: GITHUB 
     runs-on: ubuntu-latest
-    needs: prereqs
+    needs: [prereqs, create-pull-request-against-release-branch] 
     steps:
       - uses: actions/checkout@v4
 

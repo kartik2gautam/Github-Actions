@@ -159,7 +159,8 @@ jobs:
           message="Update version to ${STABLE_NEXT_VERSION}"
           body="Update version to ${STABLE_NEXT_VERSION}."
           branch="release/v$stable_version"
-
+          git config --global user.email "kartikkg799@gmail.com"
+          git config --global user.name "kartik2gautam"
           git commit -a -m "$message"
           git push origin HEAD:$branch
           gh pr create --title "$message" \

@@ -157,7 +157,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
         run: |
           message="Update version to ${STABLE_NEXT_VERSION}"
-          body="Update version to \`${STABLE_NEXT_VERSION}`."
+          body="Update version to ${STABLE_NEXT_VERSION}."
           branch="release/v$stable_version"
 
           git commit -a -m "$message"

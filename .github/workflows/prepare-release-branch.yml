@@ -158,7 +158,7 @@ jobs:
         run: |
           message="Update version to ${STABLE_NEXT_VERSION}"
           body="Update version to \`${STABLE_NEXT_VERSION}`."
-          branch="opentelemetrybot/update-version-to-${STABLE_NEXT_VERSION}"
+          branch="release/v$stable_version"
 
           git commit -a -m "$message"
           git push origin HEAD:$branch

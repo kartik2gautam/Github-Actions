@@ -5,7 +5,6 @@ on:
       prerelease_version:
         description: "Pre-release version number"
         required: True
-        default: "2.0.0" 
       feature_branch:
         description: "Branch for release"
         required: True

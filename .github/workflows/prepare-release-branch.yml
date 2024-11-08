@@ -52,6 +52,8 @@ jobs:
         env:
           PRERELEASE_VERSION: ${{ github.event.inputs.prerelease_version }}
         run: |
+          chmod +x ./scripts/eachdist.py
+
           if [[ -z $PRERELEASE_VERSION ]]; then
             stable_version=$(./scripts/eachdist.py version --mode stable)
             stable_version=${stable_version//.dev/}

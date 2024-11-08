@@ -88,17 +88,17 @@ jobs:
         run: |
           
           stable_version=$PRERELEASE_VERSION
-          RELEASE_BRANCH_NAME="prepare-release-${stable_version}"
+          RELEASE_BRANCH_NAME="release/v$stable_version"
           message="Prepare release ${stable_version}"
           branch="kartik2gautam/prepare-release-${stable_version}"
           git config --global user.email "kartikkg799@gmail.com"
           git config --global user.name "kartik2gautam"
           git commit -a -m "$message"
           git push origin HEAD:$branch
-          gh pr create --title "[main] $message" \
+          gh pr create --title "[$RELEASE_BRANCH_NAME] $message" \
                        --body "$message." \
                        --head $branch \
-                       --base main
+                       --base $RELEASE_BRANCH_NAME
 
   create-pull-request-against-main:
     environment: GITHUB 

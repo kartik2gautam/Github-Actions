@@ -4,7 +4,7 @@ on:
     inputs:
       prerelease_version:
         description: "Pre-release version number"
-        required: false
+        required: True
         default: "2.0.0" 
 
 jobs:
@@ -116,15 +116,11 @@ jobs:
         run: |
 
           stable_version=$PRERELEASE_VERSION
-
-
-
           if [[ $stable_version =~ ^([0-9]+)\.([0-9]+)\.0$ ]]; then
             stable_major="${BASH_REMATCH[1]}"
             stable_minor="${BASH_REMATCH[2]}"
             stable_next_version="$stable_major.$((stable_minor + 1)).0"
           elif [[ $stable_version =~ ^([0-9]+)\.([0-9]+)\.0 ]]; then
-            # pre-release version, e.g. 1.9.0rc2
             stable_major="${BASH_REMATCH[1]}"
             stable_minor="${BASH_REMATCH[2]}"
             stable_next_version="$stable_major.$stable_minor.0"
@@ -132,9 +128,6 @@ jobs:
             echo "unexpected stable_version: $stable_version"
             exit 1
           fi
-
-
-
           echo "STABLE_VERSION=${stable_version}"
           echo "STABLE_NEXT_VERSION=${stable_next_version}.dev"
 
@@ -149,7 +142,6 @@ jobs:
           # the actual release date on main will be updated at the end of the release workflow
           date=$(date "+%Y-%m-%d")
           sed -Ei "s/^## Unreleased$/## Unreleased\n\n## Version ${STABLE_VERSION}\/ ($date)/" CHANGELOG.md
-
 
       - name: Create pull request against main
         env:

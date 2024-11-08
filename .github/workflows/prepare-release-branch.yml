@@ -156,9 +156,9 @@ jobs:
           # not using secrets.GITHUB_TOKEN since pull requests from that token do not run workflows
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
         run: |
-          message="Update version to ${stable_version}"
-          body="Update version to ${stable_version}."
-          branch="release/v$stable_version"
+          message="Update version to ${PRERELEASE_VERSION}"
+          body="Update version to ${PRERELEASE_VERSION}."
+          branch="release/v$PRERELEASE_VERSION"
           git config --global user.email "kartikkg799@gmail.com"
           git config --global user.name "kartik2gautam"
           git commit -a -m "$message"

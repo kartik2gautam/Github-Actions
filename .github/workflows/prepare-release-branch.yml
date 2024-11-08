@@ -6,7 +6,9 @@ on:
         description: "Pre-release version number"
         required: True
         default: "2.0.0" 
-
+      feature_branch:
+        description: "Branch for release"
+        required: True
 jobs:
   prereqs:
     environment: GITHUB 
@@ -22,12 +24,19 @@ jobs:
             echo this workflow should only be run against main
             exit 1
           fi
-
+          
           if ! grep --quiet "^## Unreleased$" CHANGELOG.md; then
             echo the change log is missing an \"Unreleased\" section
             exit 1
           fi
-
+          if [[ ! -z $PRERELEASE_VERSION ]]; then
+            stable_version=$(./scripts/eachdist.py version --mode stable)
+            stable_version=${stable_version//.dev/}
+            if [[ $PRERELEASE_VERSION != ${stable_version}* ]]; then
+              echo "$PRERELEASE_VERSION is not a prerelease for the version on main ($stable_version)"
+              exit 1
+            fi
+          fi
 
   create-pull-request-against-release-branch:
     environment: GITHUB 
@@ -43,23 +52,29 @@ jobs:
         env:
           PRERELEASE_VERSION: ${{ github.event.inputs.prerelease_version }}
         run: |
-          
-          
-          stable_version=$PRERELEASE_VERSION
-          
+          if [[ -z $PRERELEASE_VERSION ]]; then
+            stable_version=$(./scripts/eachdist.py version --mode stable)
+            stable_version=${stable_version//.dev/}
+          else
+            stable_version=$PRERELEASE_VERSION
+          fi
 
-          
+          unstable_version=$(./scripts/eachdist.py version --mode prerelease)
+          unstable_version=${unstable_version//.dev/}
 
           if [[ $stable_version =~ ^([0-9]+)\.([0-9]+)\.0$ ]]; then
-            stable_version_branch_part=$(echo $stable_version | sed -E 's/([0-9]+)\.([0-9]+)\.0/\1.\2.0/')
-            release_branch_name="release/v${stable_version_branch_part}"
+            stable_version_branch_part=$(echo $stable_version | sed -E 's/([0-9]+)\.([0-9]+)\.0/\1.\2.x/')
+            unstable_version_branch_part=$(echo $unstable_version | sed -E 's/0\.([0-9]+)b0/0.\1bx/')
+            release_branch_name="release/v${stable_version_branch_part}-${unstable_version_branch_part}"
           elif [[ $stable_version =~ ^([0-9]+)\.([0-9]+)\.0 ]]; then
             # pre-release version, e.g. 1.9.0rc2
-            release_branch_name="release/v$stable_version"
+            release_branch_name="release/v$stable_version-$unstable_version"
           else
             echo "unexpected version: $stable_version"
             exit 1
           fi
+
+          git push origin HEAD:$release_branch_name
 
           git push origin HEAD:$release_branch_name
 
@@ -77,8 +92,6 @@ jobs:
         run: |
           date=$(date "+%Y-%m-%d")
           sed -Ei "s/^## Unreleased$/## Version ${{ github.event.inputs.prerelease_version }}\/ ($date)/" CHANGELOG.md
-
-
 
       - name: Create pull request against the release branch
         env:

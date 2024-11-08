@@ -51,7 +51,7 @@ jobs:
           
 
           if [[ $stable_version =~ ^([0-9]+)\.([0-9]+)\.0$ ]]; then
-            stable_version_branch_part=$(echo $stable_version | sed -E 's/([0-9]+)\.([0-9]+)\.0/\1.\2.x/')
+            stable_version_branch_part=$(echo $stable_version | sed -E 's/([0-9]+)\.([0-9]+)\.0/\1.\2.0/')
             release_branch_name="release/v${stable_version_branch_part}"
           elif [[ $stable_version =~ ^([0-9]+)\.([0-9]+)\.0 ]]; then
             # pre-release version, e.g. 1.9.0rc2

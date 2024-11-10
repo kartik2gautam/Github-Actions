@@ -16,6 +16,7 @@ jobs:
 
       - name: Set environment variables
         run: |
+          chmod +x ./scripts/eachdist.py
           stable_version=$(./scripts/eachdist.py version --mode stable)
           unstable_version=$(./scripts/eachdist.py version --mode prerelease)
 

@@ -138,23 +138,33 @@ jobs:
           unstable_version=${unstable_version//.dev/}
 
           if [[ $stable_version =~ ^([0-9]+)\.([0-9]+)\.0$ ]]; then
-            stable_version_branch_part=$(echo $stable_version | sed -E 's/([0-9]+)\.([0-9]+)\.0/\1.\2.0/')
-            unstable_version_branch_part=$(echo $unstable_version | sed -E 's/0\.([0-9]+)b0/0.\1b0/')
-            release_branch_name="release/v${stable_version_branch_part}-${unstable_version_branch_part}"
+            stable_major="${BASH_REMATCH[1]}"
+            stable_minor="${BASH_REMATCH[2]}"
+            stable_next_version="$stable_major.$((stable_minor + 1)).0"
           elif [[ $stable_version =~ ^([0-9]+)\.([0-9]+)\.0 ]]; then
             # pre-release version, e.g. 1.9.0rc2
-            release_branch_name="release/v$stable_version-$unstable_version"
+            stable_major="${BASH_REMATCH[1]}"
+            stable_minor="${BASH_REMATCH[2]}"
+            stable_next_version="$stable_major.$stable_minor.0"
           else
-            echo "unexpected version: $stable_version"
+            echo "unexpected stable_version: $stable_version"
             exit 1
           fi
 
-          git push origin HEAD:$release_branch_name
+          if [[ $unstable_version =~ ^0\.([0-9]+)b[0-9]+$ ]]; then
+            unstable_minor="${BASH_REMATCH[1]}"
+          else
+            echo "unexpected unstable_version: $unstable_version"
+            exit 1
+          fi
 
-          echo "STABLE_VERSION=$stable_version" >> $GITHUB_ENV
-          echo "UNSTABLE_VERSION=$unstable_version" >> $GITHUB_ENV
-          echo "RELEASE_BRANCH_NAME=$release_branch_name" >> $GITHUB_ENV
+          unstable_next_version="0.$((unstable_minor + 1))b0"
 
+          echo "STABLE_VERSION=${stable_version}" >> $GITHUB_ENV
+          echo "STABLE_NEXT_VERSION=${stable_next_version}.dev" >> $GITHUB_ENV
+
+          echo "UNSTABLE_VERSION=${unstable_version}" >> $GITHUB_ENV
+          echo "UNSTABLE_NEXT_VERSION=${unstable_next_version}.dev" >> $GITHUB_ENV
       - name: Make update-version.sh executable
         run: chmod +x .github/scripts/update-version.sh
 

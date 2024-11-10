@@ -66,8 +66,8 @@ jobs:
           unstable_version=${unstable_version//.dev/}
 
           if [[ $stable_version =~ ^([0-9]+)\.([0-9]+)\.0$ ]]; then
-            stable_version_branch_part=$(echo $stable_version | sed -E 's/([0-9]+)\.([0-9]+)\.0/\1.\2.x/')
-            unstable_version_branch_part=$(echo $unstable_version | sed -E 's/0\.([0-9]+)b0/0.\1bx/')
+            stable_version_branch_part=$(echo $stable_version | sed -E 's/([0-9]+)\.([0-9]+)\.0/\1.\2.0/')
+            unstable_version_branch_part=$(echo $unstable_version | sed -E 's/0\.([0-9]+)b0/0.\1b0/')
             release_branch_name="release/v${stable_version_branch_part}-${unstable_version_branch_part}"
           elif [[ $stable_version =~ ^([0-9]+)\.([0-9]+)\.0 ]]; then
             # pre-release version, e.g. 1.9.0rc2
@@ -79,11 +79,9 @@ jobs:
 
           git push origin HEAD:$release_branch_name
 
-          git push origin HEAD:$release_branch_name
-
-          echo "STABLE_VERSION=$stable_version"
-
-          echo "RELEASE_BRANCH_NAME=$release_branch_name"
+          echo "STABLE_VERSION=$stable_version" >> $GITHUB_ENV
+          echo "UNSTABLE_VERSION=$unstable_version" >> $GITHUB_ENV
+          echo "RELEASE_BRANCH_NAME=$release_branch_name" >> $GITHUB_ENV
       - name: Make update-version.sh executable
         run: chmod +x .github/scripts/update-version.sh
       - name: Update version
@@ -102,11 +100,8 @@ jobs:
           # not using secrets.GITHUB_TOKEN since pull requests from that token do not run workflows
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
         run: |
-          
-          stable_version=$PRERELEASE_VERSION
-          RELEASE_BRANCH_NAME="release/v$stable_version"
-          message="Prepare release ${stable_version}"
-          branch="kartik2gautam/prepare-release-${stable_version}"
+          message="Prepare release ${STABLE_VERSION}/${UNSTABLE_VERSION}"
+          branch="opentelemetrybot/prepare-release-${STABLE_VERSION}-${UNSTABLE_VERSION}"
           git config --global user.email "kartikkg799@gmail.com"
           git config --global user.name "kartik2gautam"
           git commit -a -m "$message"

@@ -49,7 +49,7 @@ jobs:
   create-pull-request-against-release-branch:
     environment: GITHUB 
     runs-on: ubuntu-latest
-    needs: prereqs
+    needs: [prereqs,setup]
     steps:
       - uses: actions/checkout@v4
 

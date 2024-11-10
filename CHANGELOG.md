@@ -2,6 +2,8 @@
 
 ## Version / (2024-11-10)
 
+## Version / (2024-11-10)
+
 - Ndjson format for S3 and Blob exporters ([#61](https://github.com/monocle2ai/monocle/pull/61))
 - Set monocle exporter from env setting ([#60](https://github.com/monocle2ai/monocle/pull/60))
 - Update workflow name and type with new format ([#59](https://github.com/monocle2ai/monocle/pull/59))

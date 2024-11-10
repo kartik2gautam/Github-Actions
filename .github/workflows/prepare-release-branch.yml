@@ -14,14 +14,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install toml
-        run: pip install toml
+
   prereqs:
     needs: setup
     environment: GITHUB 
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      
+      - name: Install toml
+        run: pip install toml
 
       - name: Verify prerequisites
         env:

@@ -174,7 +174,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
         run: |
           message="Update version to ${STABLE_NEXT_VERSION}/${UNSTABLE_NEXT_VERSION}"
-          body="Update version to \`${STABLE_NEXT_VERSION}/${UNSTABLE_NEXT_VERSION}\`."
+          body="Update version to \${STABLE_NEXT_VERSION}/${UNSTABLE_NEXT_VERSION}\."
           branch="kartik2gautam/update-version-to-${STABLE_NEXT_VERSION}-${UNSTABLE_NEXT_VERSION}"
           git config --global user.email "kartikkg799@gmail.com"
           git config --global user.name "kartik2gautam"

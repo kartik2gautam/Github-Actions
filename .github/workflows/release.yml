@@ -11,7 +11,8 @@ jobs:
             echo this workflow should only be run against release branches
             exit 1
           fi
-
+      - name: Install toml
+        run: pip install toml
       - uses: actions/checkout@v4
 
       - name: Set environment variables
@@ -19,7 +20,7 @@ jobs:
           chmod +x ./scripts/eachdist.py
           stable_version=$(./scripts/eachdist.py version --mode stable)
           unstable_version=$(./scripts/eachdist.py version --mode prerelease)
-
+          
           if [[ $stable_version =~ ^([0-9]+)\.([0-9]+)\.([0-9]+) ]]; then
             stable_major="${BASH_REMATCH[1]}"
             stable_minor="${BASH_REMATCH[2]}"
